@@ -34,8 +34,14 @@ before_fork do |server, worker|
   # the following is highly recomended for Rails + "preload_app true"
   # as there's no need for the master process to hold a connection
   if defined?(ActiveRecord::Base)
-    ActiveRecord::Base.connection_proxy.instance_variable_get(:@shards).each do |shard, connection_pool|
-      connection_pool.disconnect!
+    begin
+     if defined?(Octopus) && Octopus.enabled?
+       ActiveRecord::Base.connection_proxy.clear_all_connections!
+     else
+       ActiveRecord::Base.connection.disconnect!
+     end
+    rescue ActiveRecord::ConnectionNotEstablished
+       nil
     end
   end
 
@@ -55,6 +61,9 @@ after_fork do |server, worker|
   # the following is *required* for Rails + "preload_app true",
   if defined?(ActiveRecord::Base)
     ActiveRecord::Base.establish_connection
+    if defined?(Octopus) && Octopus.enabled?
+      ActiveRecord::Base.connection_proxy.initialize_shards(Octopus.config)
+    end
   end
 
   # if preload_app is true, then you may also want to check and
