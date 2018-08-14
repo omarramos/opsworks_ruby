@@ -3,7 +3,9 @@ worker_processes <%= @out[:worker_processes] %>
 user "<%= node['deployer']['user'] %>"
 
 working_directory "<%= @deploy_dir %>/current"
-<% if @webserver == 'apache2' %>
+<% if @out[:port] %>
+listen "0.0.0.0:<%= @out[:port] %>",
+<% elsif @webserver == 'apache2' %>
 listen "127.0.0.1:3000",
 <% else %>
 listen "<%= @deploy_dir %>/shared/sockets/unicorn.sock",
@@ -16,7 +18,7 @@ listen "<%= @deploy_dir %>/shared/sockets/unicorn.sock",
 
 timeout <%= @out[:timeout] %>
 
-pid "<%= @deploy_dir %>/shared/pids/unicorn.pid"
+pid "/run/lock/<%= @app_shortname %>/unicorn.pid"
 
 stderr_path "<%= @deploy_dir %>/shared/log/unicorn.stderr.log"
 stdout_path "<%= @deploy_dir %>/shared/log/unicorn.stdout.log"
@@ -39,7 +41,7 @@ before_fork do |server, worker|
 
   # Before forking, kill the master process that belongs to the .oldbin PID.
   # This enables 0 downtime deploys.
-  old_pid = "<%= @deploy_dir %>/shared/pids/unicorn.pid.oldbin"
+  old_pid = "/run/lock/<%= @app_shortname %>/unicorn.pid.oldbin"
   if File.exists?(old_pid) && server.pid != old_pid
     begin
       Process.kill("QUIT", File.read(old_pid).to_i)
