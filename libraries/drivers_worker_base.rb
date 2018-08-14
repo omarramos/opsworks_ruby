@@ -10,23 +10,13 @@ module Drivers
         handle_packages
       end
 
-      def out
-        handle_output(raw_out)
-      end
-
-      def raw_out
-        node['defaults']['worker'].merge(
-          node['deploy'][app['shortname']]['worker'] || {}
-        ).symbolize_keys
-      end
-
       def validate_app_engine; end
 
       protected
 
       def add_worker_monit
         opts = { application: app['shortname'], out: out, deploy_to: deploy_dir(app), environment: environment,
-                 adapter: adapter }
+                 adapter: adapter, app_shortname: app['shortname'] }
 
         context.template File.join(node['monit']['basedir'], "#{opts[:adapter]}_#{opts[:application]}.monitrc") do
           mode '0640'
