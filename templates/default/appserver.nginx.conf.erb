@@ -20,6 +20,9 @@ server {
   send_timeout <%= @out[:send_timeout] || '10' %>;
 
   location / {
+    if (-f <%= @deploy_dir.to_s %>/public/maintenance_on.html) {
+      return 503;
+    }
     try_files $uri/index.html $uri/index.htm @<%= @name %>;
   }
 
@@ -118,6 +121,9 @@ server {
   send_timeout <%= @out[:send_timeout] || '10' %>;
 
   location / {
+    if (-f <%= @deploy_dir.to_s %>/public/maintenance_on.html) {
+      return 503;
+    }
     try_files $uri/index.html $uri/index.htm @<%= @name %>;
   }
 
