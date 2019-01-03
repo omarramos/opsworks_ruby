@@ -1,3 +1,29 @@
+# [1.13.0](https://github.com/ajgon/opsworks_ruby/compare/v1.12.0...v1.13.0) (2018-11-09)
+
+
+### Bug Fixes
+
+* **db:** Fix typo for aurora postgresql ([1bb2fb5](https://github.com/ajgon/opsworks_ruby/commit/1bb2fb5))
+
+
+### Features
+
+* **worker:** Support Shoryuken worker library ([5359679](https://github.com/ajgon/opsworks_ruby/commit/5359679))
+
+
+
+<a name="1.12.0"></a>
+# [1.12.0](https://github.com/ajgon/opsworks_ruby/compare/v1.11.0...v1.12.0) (2018-10-03)
+
+
+### Features
+
+* **appserver:** add port configuration ([6540201](https://github.com/ajgon/opsworks_ruby/commit/6540201))
+* **database:** added aurora-postgres as an accepted engine for Postgres RDS ([626a11d](https://github.com/ajgon/opsworks_ruby/commit/626a11d))
+* **webserver:** add support for `force_ssl` attribute ([2281047](https://github.com/ajgon/opsworks_ruby/commit/2281047)), closes [#189](https://github.com/ajgon/opsworks_ruby/issues/189)
+
+
+
 <a name="1.11.0"></a>
 # [1.11.0](https://github.com/ajgon/opsworks_ruby/compare/v1.10.1...v1.11.0) (2018-07-17)
 
